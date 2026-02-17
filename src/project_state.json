@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Android app \"ATHENA SURVEILLANCE\" for offline visitor/vehicle entry logging at multiple access points, with local storage and bilingual (FR/AR) PDF export, modern touch-friendly UI, and APK delivery (Android 7.0+).",
+  "architectural_notes": [
+    "100% offline operation: no Internet dependency; all data stored locally (Room/SQLite).",
+    "Minimum compatibility Android 7.0+; target APK size under 50MB.",
+    "Data model requires visitors + vehicles tables; each record includes date and access point; support updating/declaring exit time (HS).",
+    "PDF export must be generated fully on-device, bilingual FR/AR, A4 landscape with app header information; allow save + share.",
+    "App navigation structure fixed to: Splash -> Home -> Entry Type -> Form -> History/Export; include smooth transitions and touch-friendly UI.",
+    "Bilingual UI requirement: French/Arabic via detection or manual toggle."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- App logo mark with shield/eye surveillance motif, flat modern style, navy/gray on white (athena-logo.dim_512x512.png)\n- Splash screen background with subtle geometric pattern in navy/charcoal gradient (athena-splash-bg.dim_1080x1920.png)\n- Set of 6 access point icons in a consistent monochrome style (acp-icons-set.dim_512x512.png)\n- Vehicle type icon set in a consistent monochrome style (vehicle-icons-set.dim_512x512.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-a-fully-offline-first-client-app-for-logging-visitor-and-vehicle-entries-under-the-name-athena-surveillance-with-no-required-network-calls-for-core-usage-data-entry-history-viewing-and-pdf-export-must-all-work-without-internet",
+      "title": "Implement a fully offline-first client app for logging visitor and vehicle entries under the name “ATHENA SURVEILLANCE”, with no required network calls for core usage (data entry, history viewing, and PDF export must all work without Internet).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-the-screen-flow-and-navigation-exactly-as-specified-splash-2-3s-fade-animation-home-entry-type-visitor-form-or-vehicle-form-history-export-including-back-next-buttons-and-smooth-slide-transitions-between-screens",
+      "title": "Create the screen flow and navigation exactly as specified: Splash (2–3s, fade animation) → Home → Entry Type → (Visitor Form or Vehicle Form) → History/Export, including Back/Next buttons and smooth slide transitions between screens.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-on-the-home-screen-display-the-current-date-automatically-capture-shift-supervisor-name-chef-de-poste-via-a-text-input-with-a-user-icon-and-select-an-access-point-from-a-dropdown-containing-acp1-acp6-with-clear-icons",
+      "title": "On the Home screen, display the current date automatically, capture “Shift Supervisor Name” (chef de poste) via a text input with a user icon, and select an Access Point from a dropdown containing ACP1–ACP6 with clear icons.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-visitor-entry-form-with-the-specified-fields-visitor-name-person-visited-national-id-cin-number-vehicle-plate-company-entry-time-he-exit-time-hs-destination-observations-and-a-selector-for-announced-not-announced-save-must-write-a-visitor-record-to-local-storage-along-with-the-record-date-and-selected-access-point-and-shift-supervisor-name",
+      "title": "Implement the Visitor entry form with the specified fields: Visitor Name, Person Visited, National ID (CIN) Number, Vehicle Plate, Company, Entry Time (HE), Exit Time (HS), Destination, Observations, and a selector for Announced / Not Announced; Save must write a visitor record to local storage along with the record date and selected access point and shift supervisor name.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-vehicle-entry-form-with-the-specified-fields-vehicle-type-dropdown-with-icons-tow-truck-truck-mobile-crane-forklift-grader-ambulance-other-driver-name-plate-company-voucher-number-entry-time-he-exit-time-hs-destination-observations-save-must-write-a-vehicle-record-to-local-storage-along-with-the-record-date-and-selected-access-point-and-shift-supervisor-name",
+      "title": "Implement the Vehicle entry form with the specified fields: Vehicle Type dropdown with icons (Tow Truck, Truck, Mobile Crane, Forklift, Grader, Ambulance, Other), Driver Name, Plate, Company, Voucher Number, Entry Time (HE), Exit Time (HS), Destination, Observations; Save must write a vehicle record to local storage along with the record date and selected access point and shift supervisor name.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-local-persistence-for-two-record-types-visitors-and-vehicles-in-a-way-that-works-fully-offline-in-the-browser-e-g-indexeddb-records-must-store-the-record-date-access-point-and-support-setting-updating-the-exit-time-declaration-of-exit",
+      "title": "Implement local persistence for two record types (Visitors and Vehicles) in a way that works fully offline in the browser (e.g., IndexedDB). Records must store the record date, access point, and support setting/updating the exit time (“declaration of exit”).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-history-export-screen-show-locally-stored-records-with-search-and-basic-sorting-filtering-at-minimum-by-type-and-date-and-provide-an-export-to-pdf-action-for-exporting-full-history-or-the-currently-filtered-view",
+      "title": "Build the History/Export screen: show locally stored records with search and basic sorting/filtering (at minimum by type and date), and provide an “Export to PDF” action for exporting full history or the currently filtered view.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-bilingual-french-arabic-pdfs-locally-with-a4-landscape-layout-pdf-must-include-a-header-containing-the-athena-surveillance-logo-title-date-access-point-and-shift-supervisor-name-and-tables-with-bilingual-column-titles-fr-ar-for-visitor-and-vehicle-exports",
+      "title": "Generate bilingual (French & Arabic) PDFs locally with A4 landscape layout. PDF must include a header containing the ATHENA SURVEILLANCE logo/title, date, access point, and shift supervisor name, and tables with bilingual column titles (FR/AR) for Visitor and Vehicle exports.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-bilingual-ui-support-french-and-arabic-using-either-automatic-detection-or-an-explicit-in-app-language-toggle-ensure-rtl-layout-is-handled-correctly-for-arabic-screens-and-pdf-labels",
+      "title": "Implement bilingual UI support (French and Arabic) using either automatic detection or an explicit in-app language toggle; ensure RTL layout is handled correctly for Arabic screens and PDF labels.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-modern-professional-touch-friendly-visual-design-using-a-sober-palette-navy-gray-white-large-tappable-icons-buttons-and-responsive-layouts-optimized-for-android-smartphone-sized-screens-keep-styling-consistent-across-all-screens",
+      "title": "Apply a modern, professional, touch-friendly visual design using a sober palette (navy/gray/white), large tappable icons/buttons, and responsive layouts optimized for Android smartphone-sized screens; keep styling consistent across all screens.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-robust-field-validation-for-the-forms-required-fields-date-time-formats-and-logical-constraints-like-exit-time-not-earlier-than-entry-time-when-both-provided-and-present-clear-inline-error-messages-in-the-currently-selected-language",
+      "title": "Add robust field validation for the forms (required fields, date/time formats, and logical constraints like exit time not earlier than entry time when both provided) and present clear inline error messages in the currently selected language.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-and-use-generated-static-brand-assets-an-app-logo-for-splash-header-and-a-set-of-simple-monochrome-icons-for-access-points-and-vehicle-types-stored-under-frontend-public-assets-generated-and-referenced-by-the-ui",
+      "title": "Add and use generated static brand assets: an app logo for splash/header and a set of simple monochrome icons for access points and vehicle types, stored under frontend/public/assets/generated and referenced by the UI.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-document-platform-delivery-expectations-provide-an-installable-offline-capable-web-app-pwa-like-within-the-internet-computer-project-do-not-claim-to-generate-an-android-apk-build-artifact",
+      "title": "Document platform delivery expectations: provide an installable offline-capable web app (PWA-like) within the Internet Computer project; do not claim to generate an Android APK build artifact.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create offline Android app project \"ATHENA SURVEILLANCE\" (Android 7.0+, <50MB) with no network dependencies and deliver installable APK",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Implement navigation flow with 4 screens: Splash (2–3s), Home (chef de poste + access point), Entry Type, Form (visitor/vehicle), History/Export",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Local data storage using SQLite/Room with tables for visitors and vehicles; include date of record and access point; support setting exit time",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Visitor entry form with specified fields (including announced/not announced) and local save confirmation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Vehicle entry form with vehicle type dropdown (icons) and specified fields; local save confirmation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "History screen showing local records with search/sort/filter and export action",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Generate bilingual (French/Arabic) PDF export locally (A4 landscape) with headers (logo/title, date, access point, chef de poste) and share/save options",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "UI/UX: modern professional theme (blue/grey/white), large touch icons/buttons, smooth slide transitions, responsive layout; bilingual UI with detection or toggle",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Input validation for required fields (date/time/name etc.) before saving; ensure export works without PDF/Excel errors",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "ATHENA SURVEILLANCE",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

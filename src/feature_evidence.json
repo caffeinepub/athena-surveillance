@@ -1,0 +1,275 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-a-fully-offline-first-client-app-for-logging-visitor-and-vehicle-entries-under-the-name-athena-surveillance-with-no-required-network-calls-for-core-usage-data-entry-history-viewing-and-pdf-export-must-all-work-without-internet",
+      "featureTitle": "Implement a fully offline-first client app for logging visitor and vehicle entries under the name “ATHENA SURVEILLANCE”, with no required network calls for core usage (data entry, history viewing, and PDF export must all work without Internet).",
+      "files": [
+        "frontend/index.html",
+        "frontend/public/manifest.webmanifest",
+        "frontend/public/sw.js",
+        "frontend/src/App.tsx",
+        "frontend/src/lib/pdf/exportToPdf.ts",
+        "frontend/src/lib/storage/indexedDb.ts",
+        "frontend/src/lib/storage/types.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-the-screen-flow-and-navigation-exactly-as-specified-splash-2-3s-fade-animation-home-entry-type-visitor-form-or-vehicle-form-history-export-including-back-next-buttons-and-smooth-slide-transitions-between-screens",
+      "featureTitle": "Create the screen flow and navigation exactly as specified: Splash (2–3s, fade animation) → Home → Entry Type → (Visitor Form or Vehicle Form) → History/Export, including Back/Next buttons and smooth slide transitions between screens.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/screens/EntryTypeScreen.tsx",
+        "frontend/src/screens/HistoryExportScreen.tsx",
+        "frontend/src/screens/HomeScreen.tsx",
+        "frontend/src/screens/SplashScreen.tsx",
+        "frontend/src/screens/VehicleFormScreen.tsx",
+        "frontend/src/screens/VisitorFormScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-on-the-home-screen-display-the-current-date-automatically-capture-shift-supervisor-name-chef-de-poste-via-a-text-input-with-a-user-icon-and-select-an-access-point-from-a-dropdown-containing-acp1-acp6-with-clear-icons",
+      "featureTitle": "On the Home screen, display the current date automatically, capture “Shift Supervisor Name” (chef de poste) via a text input with a user icon, and select an Access Point from a dropdown containing ACP1–ACP6 with clear icons.",
+      "files": [
+        "frontend/src/lib/accessPoints.ts",
+        "frontend/src/lib/storage/indexedDb.ts",
+        "frontend/src/screens/HomeScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-visitor-entry-form-with-the-specified-fields-visitor-name-person-visited-national-id-cin-number-vehicle-plate-company-entry-time-he-exit-time-hs-destination-observations-and-a-selector-for-announced-not-announced-save-must-write-a-visitor-record-to-local-storage-along-with-the-record-date-and-selected-access-point-and-shift-supervisor-name",
+      "featureTitle": "Implement the Visitor entry form with the specified fields: Visitor Name, Person Visited, National ID (CIN) Number, Vehicle Plate, Company, Entry Time (HE), Exit Time (HS), Destination, Observations, and a selector for Announced / Not Announced; Save must write a visitor record to local storage along with the record date and selected access point and shift supervisor name.",
+      "files": [
+        "frontend/src/lib/storage/indexedDb.ts",
+        "frontend/src/lib/validation.ts",
+        "frontend/src/screens/VisitorFormScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-vehicle-entry-form-with-the-specified-fields-vehicle-type-dropdown-with-icons-tow-truck-truck-mobile-crane-forklift-grader-ambulance-other-driver-name-plate-company-voucher-number-entry-time-he-exit-time-hs-destination-observations-save-must-write-a-vehicle-record-to-local-storage-along-with-the-record-date-and-selected-access-point-and-shift-supervisor-name",
+      "featureTitle": "Implement the Vehicle entry form with the specified fields: Vehicle Type dropdown with icons (Tow Truck, Truck, Mobile Crane, Forklift, Grader, Ambulance, Other), Driver Name, Plate, Company, Voucher Number, Entry Time (HE), Exit Time (HS), Destination, Observations; Save must write a vehicle record to local storage along with the record date and selected access point and shift supervisor name.",
+      "files": [
+        "frontend/src/lib/storage/indexedDb.ts",
+        "frontend/src/lib/vehicleTypes.ts",
+        "frontend/src/screens/VehicleFormScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-local-persistence-for-two-record-types-visitors-and-vehicles-in-a-way-that-works-fully-offline-in-the-browser-e-g-indexeddb-records-must-store-the-record-date-access-point-and-support-setting-updating-the-exit-time-declaration-of-exit",
+      "featureTitle": "Implement local persistence for two record types (Visitors and Vehicles) in a way that works fully offline in the browser (e.g., IndexedDB). Records must store the record date, access point, and support setting/updating the exit time (“declaration of exit”).",
+      "files": [
+        "frontend/src/lib/storage/indexedDb.ts",
+        "frontend/src/screens/HistoryExportScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-history-export-screen-show-locally-stored-records-with-search-and-basic-sorting-filtering-at-minimum-by-type-and-date-and-provide-an-export-to-pdf-action-for-exporting-full-history-or-the-currently-filtered-view",
+      "featureTitle": "Build the History/Export screen: show locally stored records with search and basic sorting/filtering (at minimum by type and date), and provide an “Export to PDF” action for exporting full history or the currently filtered view.",
+      "files": [
+        "frontend/src/lib/pdf/exportToPdf.ts",
+        "frontend/src/screens/HistoryExportScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-bilingual-french-arabic-pdfs-locally-with-a4-landscape-layout-pdf-must-include-a-header-containing-the-athena-surveillance-logo-title-date-access-point-and-shift-supervisor-name-and-tables-with-bilingual-column-titles-fr-ar-for-visitor-and-vehicle-exports",
+      "featureTitle": "Generate bilingual (French & Arabic) PDFs locally with A4 landscape layout. PDF must include a header containing the ATHENA SURVEILLANCE logo/title, date, access point, and shift supervisor name, and tables with bilingual column titles (FR/AR) for Visitor and Vehicle exports.",
+      "files": [
+        "frontend/src/lib/pdf/exportToPdf.ts",
+        "frontend/src/lib/pdf/templates.ts",
+        "frontend/src/screens/HistoryExportScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-bilingual-ui-support-french-and-arabic-using-either-automatic-detection-or-an-explicit-in-app-language-toggle-ensure-rtl-layout-is-handled-correctly-for-arabic-screens-and-pdf-labels",
+      "featureTitle": "Implement bilingual UI support (French and Arabic) using either automatic detection or an explicit in-app language toggle; ensure RTL layout is handled correctly for Arabic screens and PDF labels.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/i18n/I18nProvider.tsx",
+        "frontend/src/i18n/translations.ts",
+        "frontend/src/lib/pdf/templates.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-modern-professional-touch-friendly-visual-design-using-a-sober-palette-navy-gray-white-large-tappable-icons-buttons-and-responsive-layouts-optimized-for-android-smartphone-sized-screens-keep-styling-consistent-across-all-screens",
+      "featureTitle": "Apply a modern, professional, touch-friendly visual design using a sober palette (navy/gray/white), large tappable icons/buttons, and responsive layouts optimized for Android smartphone-sized screens; keep styling consistent across all screens.",
+      "files": [
+        "frontend/index.css",
+        "frontend/src/App.tsx",
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-robust-field-validation-for-the-forms-required-fields-date-time-formats-and-logical-constraints-like-exit-time-not-earlier-than-entry-time-when-both-provided-and-present-clear-inline-error-messages-in-the-currently-selected-language",
+      "featureTitle": "Add robust field validation for the forms (required fields, date/time formats, and logical constraints like exit time not earlier than entry time when both provided) and present clear inline error messages in the currently selected language.",
+      "files": [
+        "frontend/src/i18n/translations.ts",
+        "frontend/src/lib/validation.ts",
+        "frontend/src/screens/VehicleFormScreen.tsx",
+        "frontend/src/screens/VisitorFormScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-and-use-generated-static-brand-assets-an-app-logo-for-splash-header-and-a-set-of-simple-monochrome-icons-for-access-points-and-vehicle-types-stored-under-frontend-public-assets-generated-and-referenced-by-the-ui",
+      "featureTitle": "Add and use generated static brand assets: an app logo for splash/header and a set of simple monochrome icons for access points and vehicle types, stored under frontend/public/assets/generated and referenced by the UI.",
+      "files": [
+        "frontend/src/components/AppShell.tsx",
+        "frontend/src/screens/HomeScreen.tsx",
+        "frontend/src/screens/SplashScreen.tsx",
+        "frontend/src/screens/VehicleFormScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-document-platform-delivery-expectations-provide-an-installable-offline-capable-web-app-pwa-like-within-the-internet-computer-project-do-not-claim-to-generate-an-android-apk-build-artifact",
+      "featureTitle": "Document platform delivery expectations: provide an installable offline-capable web app (PWA-like) within the Internet Computer project; do not claim to generate an Android APK build artifact.",
+      "files": [
+        "frontend/DELIVERY.md",
+        "frontend/public/manifest.webmanifest",
+        "frontend/public/sw.js"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
