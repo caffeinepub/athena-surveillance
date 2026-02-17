@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 5,
   "summary": "Android app \"ATHENA SURVEILLANCE\" for offline visitor/vehicle entry logging at multiple access points, with local storage and bilingual (FR/AR) PDF export, modern touch-friendly UI, and APK delivery (Android 7.0+).",
   "architectural_notes": [
     "100% offline operation: no Internet dependency; all data stored locally (Room/SQLite).",
@@ -8,11 +8,13 @@
     "Data model requires visitors + vehicles tables; each record includes date and access point; support updating/declaring exit time (HS).",
     "PDF export must be generated fully on-device, bilingual FR/AR, A4 landscape with app header information; allow save + share.",
     "App navigation structure fixed to: Splash -> Home -> Entry Type -> Form -> History/Export; include smooth transitions and touch-friendly UI.",
-    "Bilingual UI requirement: French/Arabic via detection or manual toggle."
+    "Bilingual UI requirement: French/Arabic via detection or manual toggle.",
+    "Delivery clarification needed: user explicitly requests an Android APK build artifact; this may conflict with the current delivery expectation of an installable offline-capable web app (PWA-like) rather than generating an APK."
   ],
-  "known_issues": [],
+  "known_issues": [
+    "Potential scope/platform mismatch: request to \"build APK\" may not be supported if delivery is limited to a PWA-like web app (no APK artifact generation)."
+  ],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- App logo mark with shield/eye surveillance motif, flat modern style, navy/gray on white (athena-logo.dim_512x512.png)\n- Splash screen background with subtle geometric pattern in navy/charcoal gradient (athena-splash-bg.dim_1080x1920.png)\n- Set of 6 access point icons in a consistent monochrome style (acp-icons-set.dim_512x512.png)\n- Vehicle type icon set in a consistent monochrome style (vehicle-icons-set.dim_512x512.png)",
   "existing_features": [
     {
       "id": "feature-implement-a-fully-offline-first-client-app-for-logging-visitor-and-vehicle-entries-under-the-name-athena-surveillance-with-no-required-network-calls-for-core-usage-data-entry-history-viewing-and-pdf-export-must-all-work-without-internet",
@@ -115,6 +117,22 @@
       "title": "Document platform delivery expectations: provide an installable offline-capable web app (PWA-like) within the Internet Computer project; do not claim to generate an Android APK build artifact.",
       "reqIds": [
         "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-in-app-install-on-android-help-surface-screen-dialog-or-bottom-sheet-that-clearly-states-that-no-android-apk-is-provided-and-explains-how-to-install-the-app-as-a-pwa-via-the-browser-add-to-home-screen-flow",
+      "title": "Add an in-app “Install on Android” help surface (screen, dialog, or bottom sheet) that clearly states that no Android APK is provided and explains how to install the app as a PWA via the browser “Add to Home screen” flow.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-when-the-browser-indicates-the-app-is-installable-pwa-show-a-lightweight-install-call-to-action-in-the-ui-that-triggers-the-native-install-prompt-when-supported-and-otherwise-links-to-the-install-on-android-help-surface",
+      "title": "When the browser indicates the app is installable (PWA), show a lightweight “Install” call-to-action in the UI that triggers the native install prompt when supported, and otherwise links to the “Install on Android” help surface.",
+      "reqIds": [
+        "REQ-15"
       ],
       "version": 1
     }

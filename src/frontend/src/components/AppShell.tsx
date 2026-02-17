@@ -1,8 +1,11 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { History, Languages } from 'lucide-react';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { History, Languages, Download, Smartphone } from 'lucide-react';
 import { useTranslation } from '../i18n/I18nProvider';
 import { SiCaffeine } from 'react-icons/si';
+import { usePwaInstall } from '../hooks/usePwaInstall';
+import InstallOnAndroidHelp from './InstallOnAndroidHelp';
 
 interface AppShellProps {
   children: ReactNode;
@@ -11,9 +14,24 @@ interface AppShellProps {
 
 export default function AppShell({ children, onNavigateToHistory }: AppShellProps) {
   const { language, setLanguage, t } = useTranslation();
+  const { isInstallable, triggerInstall } = usePwaInstall();
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
 
   const toggleLanguage = () => {
     setLanguage(language === 'fr' ? 'ar' : 'fr');
+  };
+
+  const handleInstallClick = async () => {
+    if (isInstallable) {
+      const installed = await triggerInstall();
+      if (!installed) {
+        // If user dismissed the prompt, show help as fallback
+        setShowInstallHelp(true);
+      }
+    } else {
+      // If not installable, show help
+      setShowInstallHelp(true);
+    }
   };
 
   return (
@@ -30,6 +48,20 @@ export default function AppShell({ children, onNavigateToHistory }: AppShellProp
               <h1 className="text-xl font-bold">ATHENA SURVEILLANCE</h1>
             </div>
             <div className="flex items-center gap-2">
+              <Dialog open={showInstallHelp} onOpenChange={setShowInstallHelp}>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleInstallClick}
+                    className="text-primary-foreground hover:bg-primary-foreground/10"
+                    title="Install App"
+                  >
+                    {isInstallable ? <Download className="w-5 h-5" /> : <Smartphone className="w-5 h-5" />}
+                  </Button>
+                </DialogTrigger>
+                <InstallOnAndroidHelp />
+              </Dialog>
               <Button
                 variant="ghost"
                 size="icon"

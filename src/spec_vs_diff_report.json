@@ -1,92 +1,24 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T22:48:17.606Z",
-  "summary": "Diff adds a new offline-first React screen-flow app with FR/AR i18n, IndexedDB storage for visitor/vehicle records (including exit-time updates), history search/filter/sort UI, and a bilingual A4-landscape print-to-PDF export via a print window. However, some specified navigation elements (notably Entry Type 'Next') and parts of PDF export filtering/saving behavior are not evidenced, and several non-requested elements (caffeine.ai branding/footer, Internet Identity/actor wiring) appear.",
+  "generatedAt": "2026-02-17T23:01:59.122Z",
+  "summary": "REQ-14 and REQ-15 appear implemented via a new “Install on Android” dialog (with explicit no-APK + Chrome A2HS steps + offline note) and a header install CTA that triggers the native PWA prompt when available or falls back to the help dialog. However, the project still contains at least one place claiming APK delivery, which violates the BuildRequest constraint to not claim APK/AAB delivery.",
   "missing_requirements": [
     {
-      "id": "REQ-2",
-      "requirement": "Entry Type screen must have Visitor, Vehicle, Back (to Home), and Next (to the selected form).",
-      "reason": "The EntryType screen shows Visitor and Vehicle selection buttons and a Back button, but no separate Next button; selection directly triggers navigation via onNext('visitor'|'vehicle').",
+      "requirement": "Do not claim to generate or deliver an Android APK artifact; the project is delivered as an installable offline-capable web app (PWA-like).",
+      "reason": "The modified project state summary still describes APK delivery (\"Android app\" and \"APK delivery\"), which contradicts the constraint and the BuildRequest title intent to clarify no-APK delivery.",
       "evidence": [
-        "frontend/src/screens/EntryTypeScreen.tsx"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Export to PDF must work for full history or the currently filtered view.",
-      "reason": "Export uses only the type filter to decide which lists to export; there is no evidence that the search query or date/time sort/filters are applied to the exported subset.",
-      "evidence": [
-        "frontend/src/screens/HistoryExportScreen.tsx"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "requirement": "PDF is saved locally and can be shared/downloaded from the client without backend involvement.",
-      "reason": "The export implementation opens a new window and relies on printing; there is no evidence of generating and downloading/saving a PDF file (e.g., blob download) or a share action.",
-      "evidence": [
-        "frontend/src/lib/pdf/exportToPdf.ts"
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "requirement": "Document platform delivery expectations: provide an installable offline-capable web app (PWA-like) and do not claim to generate an Android APK artifact.",
-      "reason": "No documentation files or PWA/installability setup (manifest/service worker/docs) are evidenced in the provided diff summary.",
-      "evidence": [
-        "File diff summary shows no documentation or PWA-related files"
+        "project_state.json"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Footer branding/link to caffeine.ai (including icon) included in the app shell.",
-      "reason": "Not requested in the BuildRequest; adds external branding/link in UI.",
-      "evidence": [
-        "frontend/src/components/AppShell.tsx"
-      ]
-    },
-    {
-      "description": "Internet Identity and actor hooks/wiring added/used in main entrypoint.",
-      "reason": "Offline-first core flows do not require backend/auth; BuildRequest does not ask to add or expand Internet Identity/actor integration.",
-      "evidence": [
-        "frontend/src/main.tsx",
-        "frontend/src/hooks/useActor.ts",
-        "frontend/src/hooks/useInternetIdentity.ts"
-      ]
-    }
-  ],
-  "confidence": 0.62,
+  "hallucinated_features": [],
+  "confidence": 0.72,
   "changed_files": [
-    "all_files_summary.json",
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/DELIVERY.md",
-    "frontend/index.css",
-    "frontend/index.html",
-    "frontend/public/manifest.webmanifest",
-    "frontend/public/sw.js",
-    "frontend/src/App.tsx",
     "frontend/src/components/AppShell.tsx",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/i18n/I18nProvider.tsx",
-    "frontend/src/i18n/translations.ts",
-    "frontend/src/index.css",
-    "frontend/src/lib/accessPoints.ts",
-    "frontend/src/lib/pdf/exportToPdf.ts",
-    "frontend/src/lib/pdf/templates.ts",
-    "frontend/src/lib/storage/indexedDb.ts",
-    "frontend/src/lib/storage/types.ts",
-    "frontend/src/lib/validation.ts",
-    "frontend/src/lib/vehicleTypes.ts",
-    "frontend/src/main.tsx",
-    "frontend/src/screens/EntryTypeScreen.tsx",
-    "frontend/src/screens/HistoryExportScreen.tsx",
-    "frontend/src/screens/HomeScreen.tsx",
-    "frontend/src/screens/SplashScreen.tsx",
-    "frontend/src/screens/VehicleFormScreen.tsx",
-    "frontend/src/screens/VisitorFormScreen.tsx",
-    "frontend/tailwind.config.js",
+    "frontend/src/components/InstallOnAndroidHelp.tsx",
+    "frontend/src/hooks/usePwaInstall.ts",
     "project_state.json"
   ]
 }

@@ -6,7 +6,7 @@
   "frontend/src/screens/VisitorFormScreen.tsx": "Visitor entry form with all required fields, validation, announced/not-announced selector, and local IndexedDB persistence with success confirmation.",
   "frontend/src/screens/VehicleFormScreen.tsx": "Vehicle entry form with vehicle type dropdown (with icons), all required fields, validation, and local IndexedDB persistence with success confirmation.",
   "frontend/src/screens/HistoryExportScreen.tsx": "History and export screen displaying all records with search, filter, sort, exit time update dialog, and bilingual PDF export functionality.",
-  "frontend/src/components/AppShell.tsx": "Reusable layout shell component with header (logo, title, language toggle, history navigation) and footer with attribution.",
+  "frontend/src/components/AppShell.tsx": "Reusable layout shell component with header (logo, title, install button, language toggle, history navigation) and footer with attribution; install button triggers native prompt when available or shows help dialog as fallback.",
   "frontend/src/i18n/I18nProvider.tsx": "Internationalization context provider managing language state (FR/AR), localStorage persistence, and translation function with RTL support.",
   "frontend/src/i18n/translations.ts": "Complete bilingual translation dictionaries for French and Arabic covering all UI strings, validation messages, and PDF labels.",
   "frontend/src/lib/storage/types.ts": "TypeScript interfaces defining VisitorRecord and VehicleRecord data structures with all required fields.",
@@ -20,5 +20,7 @@
   "frontend/DELIVERY.md": "Documentation explaining this is a PWA web application (not an Android APK) with offline capabilities via browser technologies.",
   "frontend/public/sw.js": "Service worker implementing offline caching strategy for app shell and static assets.",
   "frontend/public/manifest.webmanifest": "PWA manifest enabling mobile installation with app metadata and icon configuration.",
-  "frontend/index.html": "HTML entry point with PWA metadata, service worker registration, and mobile viewport configuration."
+  "frontend/index.html": "HTML entry point with PWA metadata, service worker registration, and mobile viewport configuration.",
+  "frontend/src/hooks/usePwaInstall.ts": "React hook that listens for the browser's beforeinstallprompt event and exposes installability state and a function to trigger the native PWA install prompt.",
+  "frontend/src/components/InstallOnAndroidHelp.tsx": "Dialog content component displaying step-by-step instructions for installing the PWA on Android Chrome via \"Add to Home screen\", with explicit note that no APK is available and offline functionality information."
 }

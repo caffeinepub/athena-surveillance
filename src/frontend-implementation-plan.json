@@ -1,420 +1,50 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "ATHENA SURVEILLANCE — Offline Logbook (FR/AR) with Local PDF Export",
+  "title": "Clarify no-APK delivery and add in-app Android PWA installation guidance",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Make the app fully offline-first for entry, history viewing, and PDF export using browser-local storage only.",
+      "id": "REQ-14",
+      "summary": "Provide an in-app “Install on Android” help surface explaining no APK delivery and how to install as a PWA via Add to Home screen, including offline note.",
       "acceptanceCriteria": [
-        "App loads and remains functional with the browser set to offline mode (data entry, history, PDF export still work).",
-        "No core flow requires calling the Motoko backend canister; if a backend exists it is not required for offline usage."
+        "From the app UI, a user can open an “Install on Android” help view in 2 taps or fewer (e.g., from the header or footer).",
+        "The help view includes explicit English text stating that the app is a web app (PWA) and that an Android APK is not available from this project.",
+        "The help view provides step-by-step instructions for Android Chrome: open browser menu (⋮) → “Add to Home screen” (or “Install app”) → confirm.",
+        "The help view mentions that offline use works after the first successful load while online.",
+        "All new user-facing strings introduced by this requirement are in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/lib/storage/indexedDb.ts",
+          "path": "frontend/src/components/InstallOnAndroidHelp.tsx",
           "operation": "create",
-          "description": "Implement an IndexedDB-backed storage layer for visitor/vehicle records and persisted session context (shift supervisor + access point), ensuring all reads/writes work without network connectivity."
-        },
-        {
-          "path": "frontend/src/lib/storage/types.ts",
-          "operation": "create",
-          "description": "Define TypeScript types for VisitorRecord, VehicleRecord, and shared metadata (record date, access point, shift supervisor name) used across offline storage and UI."
-        },
-        {
-          "path": "frontend/src/lib/pdf/exportToPdf.ts",
-          "operation": "create",
-          "description": "Implement fully-local PDF generation via an in-browser print-to-PDF flow (A4 landscape) that does not depend on any network calls and can export all/filtered history."
-        },
-        {
-          "path": "frontend/public/sw.js",
-          "operation": "create",
-          "description": "Add a simple service worker to cache app shell assets for offline reloads so core flows remain available without internet."
-        },
-        {
-          "path": "frontend/public/manifest.webmanifest",
-          "operation": "create",
-          "description": "Add a web app manifest enabling installability and offline-capable PWA-like behavior on mobile browsers."
-        },
-        {
-          "path": "frontend/index.html",
-          "operation": "modify",
-          "description": "Wire PWA metadata by linking the manifest and ensuring the document title remains ATHENA SURVEILLANCE."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the main app container that uses only local state + IndexedDB for all core flows (no required backend calls)."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Implement the specified screen flow with Splash → Home → Entry Type → Visitor/Vehicle Form → History/Export, including Back/Next and smooth transitions.",
-      "acceptanceCriteria": [
-        "Splash screen displays for ~2–3 seconds with a fade-in/out and then navigates to Home automatically.",
-        "Home has a Next button that navigates to Entry Type.",
-        "Entry Type has Visitor, Vehicle, Back (to Home), and Next (to the selected form).",
-        "Forms include Save and provide a visual confirmation message after successful local save.",
-        "History/Export screen is reachable from the app navigation (provide a clear route/entry point)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Implement the full screen state machine and navigation (Back/Next) with fade (Splash) and slide transitions between screens; include a clear navigation entry point to History/Export."
-        },
-        {
-          "path": "frontend/src/screens/SplashScreen.tsx",
-          "operation": "create",
-          "description": "Create Splash screen that shows ATHENA SURVEILLANCE branding and auto-advances after ~2–3 seconds with fade-in/out. Use generated assets. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/HomeScreen.tsx",
-          "operation": "create",
-          "description": "Create Home screen UI with required inputs (shift supervisor + access point) and a Next button; persist selections locally for subsequent screens. Use shadcn-ui form primitives (e.g., Input/Select/Button) for touch-friendly controls. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/EntryTypeScreen.tsx",
-          "operation": "create",
-          "description": "Create Entry Type selection screen with Visitor/Vehicle choice and Back/Next navigation. Use shadcn-ui Button/Toggle-like components for large tap targets. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/VisitorFormScreen.tsx",
-          "operation": "create",
-          "description": "Create Visitor Form screen with Save and local success confirmation; includes Back/Next wiring as specified. Use shadcn-ui components for consistent form layout. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/VehicleFormScreen.tsx",
-          "operation": "create",
-          "description": "Create Vehicle Form screen with Save and local success confirmation; includes Back/Next wiring as specified. Use shadcn-ui components for consistent form layout. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/HistoryExportScreen.tsx",
-          "operation": "create",
-          "description": "Create History/Export screen with list display, search/filter/sort controls, exit-time update actions, and Export to PDF action. Use shadcn-ui components for inputs/table-like layout and dialogs if needed. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Home screen shows current date, requires shift supervisor name, and selects an access point (ACP1–ACP6) with icons.",
-      "acceptanceCriteria": [
-        "Today’s date is shown without user input.",
-        "Shift Supervisor Name is editable and validated as required before proceeding.",
-        "Access Point dropdown contains exactly ACP1, ACP2, ACP3, ACP4, ACP5, ACP6 and shows an icon per option.",
-        "Next is disabled (or shows validation errors) until required Home fields are valid."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/screens/HomeScreen.tsx",
-          "operation": "modify",
-          "description": "Implement auto-date display, required shift supervisor input with user icon, ACP1–ACP6 dropdown with icons, and Next gating/inline validation. Use shadcn-ui Input/Select/Button for consistent touch-friendly UI. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/lib/accessPoints.ts",
-          "operation": "create",
-          "description": "Centralize the allowed access points (ACP1–ACP6) and map each to an icon under frontend/public/assets/generated/acp-icons-set.dim_512x512.png (sprite or per-option extraction strategy used by the UI)."
-        },
-        {
-          "path": "frontend/src/lib/storage/indexedDb.ts",
-          "operation": "modify",
-          "description": "Persist and retrieve the current session context (shift supervisor name, access point, last-used date) locally to support offline flow continuity."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Implement the Visitor entry form fields and save visitor records locally with required metadata.",
-      "acceptanceCriteria": [
-        "All listed visitor fields exist on the form.",
-        "Save persists a visitor record locally that includes: created/record date, access point, and shift supervisor name (from Home), plus all form fields.",
-        "A visible success message is shown after saving (English UI text).",
-        "Validation runs before save for required fields and time formats (Entry/Exit time)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/screens/VisitorFormScreen.tsx",
-          "operation": "modify",
-          "description": "Add all required Visitor fields, Announced/Not Announced selector, localized validation, Save to IndexedDB, and an on-screen success confirmation (English UI text per requirement). Use shadcn-ui form components for consistent styling. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/lib/storage/indexedDb.ts",
-          "operation": "modify",
-          "description": "Add create/read/update logic for visitor records including record date, access point, and shift supervisor name, and support updating exit time later."
-        },
-        {
-          "path": "frontend/src/lib/validation.ts",
-          "operation": "create",
-          "description": "Implement shared validation helpers for required fields and time parsing/format checks used by both Visitor and Vehicle forms."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Implement the Vehicle entry form fields including vehicle type dropdown with icons and save vehicle records locally with required metadata.",
-      "acceptanceCriteria": [
-        "All listed vehicle fields exist on the form.",
-        "Vehicle Type dropdown contains exactly the specified options and each option has an icon.",
-        "Save persists a vehicle record locally that includes: created/record date, access point, and shift supervisor name, plus all form fields.",
-        "A visible success message is shown after saving (English UI text).",
-        "Validation runs before save for required fields and time formats (Entry/Exit time)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/screens/VehicleFormScreen.tsx",
-          "operation": "modify",
-          "description": "Add all required Vehicle fields, vehicle type dropdown with icons, localized validation, Save to IndexedDB, and on-screen success confirmation (English UI text per requirement). Use shadcn-ui Input/Select/Button for consistent touch UI. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/lib/vehicleTypes.ts",
-          "operation": "create",
-          "description": "Centralize the allowed vehicle types (Tow Truck, Truck, Mobile Crane, Forklift, Grader, Ambulance, Other) and map each to an icon under frontend/public/assets/generated/vehicle-icons-set.dim_512x512.png (sprite or per-option extraction strategy used by the UI)."
-        },
-        {
-          "path": "frontend/src/lib/storage/indexedDb.ts",
-          "operation": "modify",
-          "description": "Add create/read/update logic for vehicle records including record date, access point, and shift supervisor name, and support updating exit time later."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Provide robust offline local persistence for Visitors and Vehicles, including updating exit time after creation.",
-      "acceptanceCriteria": [
-        "Visitor and Vehicle records are stored locally and remain after refresh/reopen.",
-        "Each stored record contains record date and access point.",
-        "Exit time can be set at creation and can be updated later for an existing record (for both Visitors and Vehicles).",
-        "No network is required for persistence operations."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/lib/storage/indexedDb.ts",
-          "operation": "modify",
-          "description": "Implement durable IndexedDB schema/versioning and CRUD operations for two record types, including an explicit update operation for exit time ('declaration of exit') for both Visitors and Vehicles."
-        },
-        {
-          "path": "frontend/src/screens/HistoryExportScreen.tsx",
-          "operation": "modify",
-          "description": "Add UI controls to set/update exit time for existing records (both types) and persist changes via the local storage layer. Use shadcn-ui input/dialog components where appropriate. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "History/Export screen lists local records with search, filter/sort, and supports exporting all or filtered results to PDF offline.",
-      "acceptanceCriteria": [
-        "History displays both Visitors and Vehicles and clearly distinguishes them.",
-        "User can search records and apply at least one filter (type) and one sort (date).",
-        "Export can produce a PDF for either all records or the currently filtered subset.",
-        "Export works fully offline."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/screens/HistoryExportScreen.tsx",
-          "operation": "modify",
-          "description": "Implement combined history view (clearly distinguishing Visitors vs Vehicles), search box, type filter, date sort, and an Export to PDF action that exports all records or the currently filtered subset. Use shadcn-ui components for search/filter controls and list/table presentation. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/lib/pdf/exportToPdf.ts",
-          "operation": "modify",
-          "description": "Support generating a PDF from either full history or the currently filtered view, entirely offline, using the same record rendering logic as the History/Export screen."
-        }
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "summary": "Generate bilingual (FR/AR) A4 landscape PDFs locally with header (logo/title, date, access point, shift supervisor) and bilingual column headers.",
-      "acceptanceCriteria": [
-        "Generated PDF is A4 landscape.",
-        "PDF header includes: app title/logo, date, access point, and shift supervisor name.",
-        "PDF content is bilingual: each column header shows French and Arabic labels.",
-        "Separate structured sections (or separate exports) exist for Visitor vs Vehicle records.",
-        "PDF is saved locally and can be shared/downloaded from the client without backend involvement."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/lib/pdf/templates.ts",
-          "operation": "create",
-          "description": "Define bilingual (FR/AR) table column label sets for Visitor and Vehicle exports, including correct RTL handling for Arabic labels."
-        },
-        {
-          "path": "frontend/src/lib/pdf/exportToPdf.ts",
-          "operation": "modify",
-          "description": "Generate an A4 landscape print layout with ATHENA SURVEILLANCE header (including frontend/public/assets/generated/athena-logo.dim_512x512.png), date, access point, and shift supervisor name; include bilingual column headers and separate sections for Visitors vs Vehicles."
-        },
-        {
-          "path": "frontend/src/screens/HistoryExportScreen.tsx",
-          "operation": "modify",
-          "description": "Ensure PDF export action includes current date/access point/supervisor context and allows exporting Visitors and Vehicles as separate sections (or separate exports) consistent with the bilingual template."
-        }
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "summary": "Add bilingual UI support (French/Arabic) with a language toggle and correct RTL handling for Arabic screens and PDF labels.",
-      "acceptanceCriteria": [
-        "App provides a clear way to switch between French and Arabic (toggle) OR auto-detects with a visible override control.",
-        "Arabic UI renders in RTL where appropriate and remains usable on mobile/touch screens.",
-        "PDF bilingual labels include Arabic correctly rendered (no missing glyphs)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/i18n/translations.ts",
-          "operation": "create",
-          "description": "Create FR/AR translation dictionaries for all UI strings used in the flow, including validation and History/Export labels."
-        },
-        {
-          "path": "frontend/src/i18n/I18nProvider.tsx",
-          "operation": "create",
-          "description": "Implement language state (toggle + optional auto-detect) and expose a translation helper; persist chosen language locally for offline continuity."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Wrap app screens with the I18nProvider and apply RTL direction when Arabic is selected (document/container dir), ensuring all screens remain touch-usable."
-        },
-        {
-          "path": "frontend/src/lib/pdf/templates.ts",
-          "operation": "modify",
-          "description": "Ensure PDF label definitions include Arabic strings and mark Arabic label blocks for RTL direction in the print layout."
-        }
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "summary": "Apply a modern, professional, touch-friendly design (navy/gray/white) with responsive layouts optimized for Android-size screens.",
-      "acceptanceCriteria": [
-        "All primary actions have large touch targets and clear visual hierarchy.",
-        "Layout adapts well to small screens without horizontal scrolling.",
-        "Color palette and typography are consistent across screens (navy/gray/white)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "create",
-          "description": "Create the missing src-level global stylesheet referenced by frontend/src/main.tsx; base it on frontend/index.css and extend with ATHENA navy/gray/white design tokens, touch-friendly defaults, and RTL-friendly utility styles."
-        },
-        {
-          "path": "frontend/index.css",
-          "operation": "modify",
-          "description": "Align Tailwind base variables with the requested sober palette and ensure consistent typography and spacing primitives across screens."
-        },
-        {
-          "path": "frontend/src/components/AppShell.tsx",
-          "operation": "create",
-          "description": "Create a reusable mobile-first layout shell (header with logo/title + language toggle + optional History entry point) used across all screens for consistent styling. Use shadcn-ui components where appropriate. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Adopt AppShell across the full flow, ensuring consistent touch target sizing and responsive spacing for smartphone-sized screens."
-        }
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "summary": "Add robust localized validation for all forms including required fields, time formats, and exit>=entry constraints.",
-      "acceptanceCriteria": [
-        "Save is blocked when required fields are missing/invalid.",
-        "Time inputs validate format and enforce exit>=entry when applicable.",
-        "Validation messages appear near the field and are localized (FR/AR)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/lib/validation.ts",
-          "operation": "modify",
-          "description": "Implement required-field checks, time format validation, and exit time logical validation (exit not earlier than entry) with localized error message keys."
-        },
-        {
-          "path": "frontend/src/screens/VisitorFormScreen.tsx",
-          "operation": "modify",
-          "description": "Wire validation to Visitor form fields, block Save when invalid, and show inline localized errors in the active language. Use shadcn-ui form styling patterns. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/VehicleFormScreen.tsx",
-          "operation": "modify",
-          "description": "Wire validation to Vehicle form fields, block Save when invalid, and show inline localized errors in the active language. Use shadcn-ui form styling patterns. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/i18n/translations.ts",
-          "operation": "modify",
-          "description": "Add localized FR/AR strings for all validation messages used by the validation helper and forms."
-        }
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "summary": "Add generated static brand assets (logo + icon sets) under frontend/public/assets/generated and use them in splash/header and dropdown icons.",
-      "acceptanceCriteria": [
-        "Generated images exist under frontend/public/assets/generated and are used in the UI (splash/header + dropdown icons).",
-        "Icons are clear at small sizes and visually consistent (single style)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/athena-logo.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated ATHENA SURVEILLANCE logo image asset at the exact path frontend/public/assets/generated/athena-logo.dim_512x512.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/athena-splash-bg.dim_1080x1920.png",
-          "operation": "create",
-          "description": "Add the generated Splash background asset at the exact path frontend/public/assets/generated/athena-splash-bg.dim_1080x1920.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/acp-icons-set.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated access point icon set asset at the exact path frontend/public/assets/generated/acp-icons-set.dim_512x512.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/vehicle-icons-set.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated vehicle type icon set asset at the exact path frontend/public/assets/generated/vehicle-icons-set.dim_512x512.png."
-        },
-        {
-          "path": "frontend/src/screens/SplashScreen.tsx",
-          "operation": "modify",
-          "description": "Use frontend/public/assets/generated/athena-splash-bg.dim_1080x1920.png and frontend/public/assets/generated/athena-logo.dim_512x512.png in the Splash UI. Verify the component's usage instructions before implementing."
+          "description": "Create a reusable help surface component (dialog/sheet content) with explicit English-only copy: no APK provided, PWA install steps for Android Chrome (⋮ → Add to Home screen/Install app → confirm), and note that offline works after the first successful online load. Use shadcn-ui primitives already in the app (e.g., Dialog content styling via existing UI components) to match the design system. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/components/AppShell.tsx",
           "operation": "modify",
-          "description": "Use frontend/public/assets/generated/athena-logo.dim_512x512.png in the header and ensure icon usage is consistent and touch-friendly. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/HomeScreen.tsx",
-          "operation": "modify",
-          "description": "Render ACP icons (from frontend/public/assets/generated/acp-icons-set.dim_512x512.png) alongside dropdown options. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/VehicleFormScreen.tsx",
-          "operation": "modify",
-          "description": "Render vehicle type icons (from frontend/public/assets/generated/vehicle-icons-set.dim_512x512.png) inside the vehicle type dropdown. Verify the component's usage instructions before implementing."
+          "description": "Wire the “Install on Android” help surface into the global layout so it is reachable in 2 taps or fewer from any screen (e.g., a header action that opens the help dialog). Use existing shadcn-ui Button and Dialog components (do not modify anything under frontend/src/components/ui) and ensure any new labels/tooltips are English. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-13",
-      "summary": "Deliver as an installable offline-capable web app (PWA-like) and explicitly avoid APK claims or dependencies.",
+      "id": "REQ-15",
+      "summary": "Add a lightweight Install CTA that triggers the native PWA install prompt when available, otherwise opens the in-app “Install on Android” help surface.",
       "acceptanceCriteria": [
-        "Project output is a web application that runs on mobile browsers and supports offline usage for core flows.",
-        "No requirement or code path depends on building or distributing an Android APK."
+        "If the browser supports the PWA install prompt, an “Install” button is shown somewhere appropriate (e.g., header menu/help) and triggers the install prompt.",
+        "If the install prompt is not available, the same UI element opens the “Install on Android” help surface instead of failing silently.",
+        "The install CTA and any related messaging added by this requirement are in English.",
+        "This change does not break offline behavior or existing navigation flow."
       ],
       "file_operations": [
         {
-          "path": "frontend/DELIVERY.md",
+          "path": "frontend/src/hooks/usePwaInstall.ts",
           "operation": "create",
-          "description": "Document delivery expectations: installable offline-capable web app within the project (PWA-like), and explicitly note that no Android APK is produced or required."
+          "description": "Implement a React hook that listens for the browser installability signal (beforeinstallprompt) and exposes: (1) whether the install prompt is currently available, and (2) a function to trigger the native install prompt when supported. Keep it side-effect safe and scoped to UI needs so it does not affect service worker/offline behavior."
         },
         {
-          "path": "frontend/public/manifest.webmanifest",
+          "path": "frontend/src/components/AppShell.tsx",
           "operation": "modify",
-          "description": "Ensure manifest properties support mobile installability (name, short_name, icons pointing to frontend/public/assets/generated/athena-logo.dim_512x512.png) without referencing APK distribution."
-        },
-        {
-          "path": "frontend/public/sw.js",
-          "operation": "modify",
-          "description": "Ensure offline caching supports app-shell loading on mobile browsers and does not rely on any Android-native packaging."
+          "description": "Add an English “Install” call-to-action in the header that uses the usePwaInstall hook: when installable, trigger the native prompt; when not installable, open the existing “Install on Android” help surface. Ensure the fallback never fails silently and does not disrupt existing navigation. Use existing shadcn-ui Button/Dialog components without modifying frontend/src/components/ui. Verify the component's usage instructions before implementing."
         }
       ]
     }

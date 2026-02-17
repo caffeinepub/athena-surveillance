@@ -1,292 +1,61 @@
 {
   "kind": "build_request",
-  "title": "Offline Visitor & Vehicle Logbook with Bilingual (FR/AR) PDF Export (ATHENA SURVEILLANCE)",
-  "projectName": "ATHENA Surveillance",
+  "title": "Clarify no-APK delivery and add in-app Android installation guidance",
+  "projectName": "ATHENA SURVEILLANCE",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Implement a fully offline-first client app for logging visitor and vehicle entries under the name “ATHENA SURVEILLANCE”, with no required network calls for core usage (data entry, history viewing, and PDF export must all work without Internet).",
+      "id": "REQ-14",
+      "text": "Add an in-app “Install on Android” help surface (screen, dialog, or bottom sheet) that clearly states that no Android APK is provided and explains how to install the app as a PWA via the browser “Add to Home screen” flow.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "Mode 100% hors ligne (aucune dépendance Internet, stockage local uniquement)",
-          "Génération PDF locale sans connexion."
+          "build APK file for this app"
         ]
       },
       "acceptanceCriteria": [
-        "App loads and remains functional with the browser set to offline mode (data entry, history, PDF export still work).",
-        "No core flow requires calling the Motoko backend canister; if a backend exists it is not required for offline usage."
+        "From the app UI, a user can open an “Install on Android” help view in 2 taps or fewer (e.g., from the header or footer).",
+        "The help view includes explicit English text stating that the app is a web app (PWA) and that an Android APK is not available from this project.",
+        "The help view provides step-by-step instructions for Android Chrome: open browser menu (⋮) → “Add to Home screen” (or “Install app”) → confirm.",
+        "The help view mentions that offline use works after the first successful load while online.",
+        "All new user-facing strings introduced by this requirement are in English."
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Create the screen flow and navigation exactly as specified: Splash (2–3s, fade animation) → Home → Entry Type → (Visitor Form or Vehicle Form) → History/Export, including Back/Next buttons and smooth slide transitions between screens.",
+      "id": "REQ-15",
+      "text": "When the browser indicates the app is installable (PWA), show a lightweight “Install” call-to-action in the UI that triggers the native install prompt when supported, and otherwise links to the “Install on Android” help surface.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "🧭 Structure et Navigation : Splash Screen ... Durée : 2–3 secondes",
-          "Page 1 – Accueil ... Bouton : “Suivant”",
-          "Page 2 – Type d’entrée ... Bouton : “Retour” ... Bouton : “Suivant”",
-          "Page 4 – Historique / Export"
+          "build APK file for this app"
         ]
       },
       "acceptanceCriteria": [
-        "Splash screen displays for ~2–3 seconds with a fade-in/out and then navigates to Home automatically.",
-        "Home has a Next button that navigates to Entry Type.",
-        "Entry Type has Visitor, Vehicle, Back (to Home), and Next (to the selected form).",
-        "Forms include Save and provide a visual confirmation message after successful local save.",
-        "History/Export screen is reachable from the app navigation (provide a clear route/entry point)."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "On the Home screen, display the current date automatically, capture “Shift Supervisor Name” (chef de poste) via a text input with a user icon, and select an Access Point from a dropdown containing ACP1–ACP6 with clear icons.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Page 1 – Accueil ... Date du jour (auto) ... “Nom du chef de poste” ... Point d’accès (ACP1, ACP2, ACP3, ACP4, ACP5, ACP6) – avec icônes"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Today’s date is shown without user input.",
-        "Shift Supervisor Name is editable and validated as required before proceeding.",
-        "Access Point dropdown contains exactly ACP1, ACP2, ACP3, ACP4, ACP5, ACP6 and shows an icon per option.",
-        "Next is disabled (or shows validation errors) until required Home fields are valid."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Implement the Visitor entry form with the specified fields: Visitor Name, Person Visited, National ID (CIN) Number, Vehicle Plate, Company, Entry Time (HE), Exit Time (HS), Destination, Observations, and a selector for Announced / Not Announced; Save must write a visitor record to local storage along with the record date and selected access point and shift supervisor name.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Cas 1 – Si “Visiteur” sélectionné : Champs à remplir ... Sélecteur : Visiteur annoncé / non annoncé ... “Enregistrer” → Stockage local"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All listed visitor fields exist on the form.",
-        "Save persists a visitor record locally that includes: created/record date, access point, and shift supervisor name (from Home), plus all form fields.",
-        "A visible success message is shown after saving (English UI text).",
-        "Validation runs before save for required fields and time formats (Entry/Exit time)."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Implement the Vehicle entry form with the specified fields: Vehicle Type dropdown with icons (Tow Truck, Truck, Mobile Crane, Forklift, Grader, Ambulance, Other), Driver Name, Plate, Company, Voucher Number, Entry Time (HE), Exit Time (HS), Destination, Observations; Save must write a vehicle record to local storage along with the record date and selected access point and shift supervisor name.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Cas 2 – Si “Véhicule” sélectionné : Liste déroulante : Type de véhicule avec icônes (Remorqueur, Camion, Grue mobile, Chariot élévateur, Niveleuse, Ambulance, Autre) ... “Enregistrer” → stockage local"
-        ]
-      },
-      "acceptanceCriteria": [
-        "All listed vehicle fields exist on the form.",
-        "Vehicle Type dropdown contains exactly the specified options and each option has an icon.",
-        "Save persists a vehicle record locally that includes: created/record date, access point, and shift supervisor name, plus all form fields.",
-        "A visible success message is shown after saving (English UI text).",
-        "Validation runs before save for required fields and time formats (Entry/Exit time)."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Implement local persistence for two record types (Visitors and Vehicles) in a way that works fully offline in the browser (e.g., IndexedDB). Records must store the record date, access point, and support setting/updating the exit time (“declaration of exit”).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "💾 Stockage local : Utiliser SQLite ou Room Database (hors ligne). Structure : Table visiteurs / Table véhicules ... Déclaration de sortie pour définir l'heure de sortie ... inclure la date d’enregistrement et le point d’accès."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Visitor and Vehicle records are stored locally and remain after refresh/reopen.",
-        "Each stored record contains record date and access point.",
-        "Exit time can be set at creation and can be updated later for an existing record (for both Visitors and Vehicles).",
-        "No network is required for persistence operations."
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Build the History/Export screen: show locally stored records with search and basic sorting/filtering (at minimum by type and date), and provide an “Export to PDF” action for exporting full history or the currently filtered view.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Page 4 – Historique / Export ... option tri ou recherche ... “Exporter en PDF” (historique complet ou filtré)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "History displays both Visitors and Vehicles and clearly distinguishes them.",
-        "User can search records and apply at least one filter (type) and one sort (date).",
-        "Export can produce a PDF for either all records or the currently filtered subset.",
-        "Export works fully offline."
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Generate bilingual (French & Arabic) PDFs locally with A4 landscape layout. PDF must include a header containing the ATHENA SURVEILLANCE logo/title, date, access point, and shift supervisor name, and tables with bilingual column titles (FR/AR) for Visitor and Vehicle exports.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "📦 Export PDF : ... PDF bilingue (Français & Arabe) ... Entêtes : logo ATHENA SURVEILLANCE + date + point d’accès + chef de poste. ... format A4 paysage."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Generated PDF is A4 landscape.",
-        "PDF header includes: app title/logo, date, access point, and shift supervisor name.",
-        "PDF content is bilingual: each column header shows French and Arabic labels.",
-        "Separate structured sections (or separate exports) exist for Visitor vs Vehicle records.",
-        "PDF is saved locally and can be shared/downloaded from the client without backend involvement."
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Implement bilingual UI support (French and Arabic) using either automatic detection or an explicit in-app language toggle; ensure RTL layout is handled correctly for Arabic screens and PDF labels.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Texte et journaux en français et arabe (détection ou bouton de basculement)."
-        ]
-      },
-      "acceptanceCriteria": [
-        "App provides a clear way to switch between French and Arabic (toggle) OR auto-detects with a visible override control.",
-        "Arabic UI renders in RTL where appropriate and remains usable on mobile/touch screens.",
-        "PDF bilingual labels include Arabic correctly rendered (no missing glyphs)."
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Apply a modern, professional, touch-friendly visual design using a sober palette (navy/gray/white), large tappable icons/buttons, and responsive layouts optimized for Android smartphone-sized screens; keep styling consistent across all screens.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Design moderne, professionnel, simple et responsive, adapté au tactile.",
-          "Thème sobre (bleu, gris, blanc).",
-          "Icônes claires et grandes adaptées au tactile."
-        ]
-      },
-      "acceptanceCriteria": [
-        "All primary actions have large touch targets and clear visual hierarchy.",
-        "Layout adapts well to small screens without horizontal scrolling.",
-        "Color palette and typography are consistent across screens (navy/gray/white)."
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "text": "Add robust field validation for the forms (required fields, date/time formats, and logical constraints like exit time not earlier than entry time when both provided) and present clear inline error messages in the currently selected language.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Validation automatique des champs (date, heure, nom, etc.).",
-          "Validation des champs avant enregistrement."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Save is blocked when required fields are missing/invalid.",
-        "Time inputs validate format and enforce exit>=entry when applicable.",
-        "Validation messages appear near the field and are localized (FR/AR)."
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "text": "Add and use generated static brand assets: an app logo for splash/header and a set of simple monochrome icons for access points and vehicle types, stored under frontend/public/assets/generated and referenced by the UI.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Splash Screen ... Afficher le logo ou le titre : ATHENA SURVEILLANCE",
-          "... Point d’accès ... avec icônes correspondantes",
-          "Type de véhicule avec icônes"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Generated images exist under frontend/public/assets/generated and are used in the UI (splash/header + dropdown icons).",
-        "Icons are clear at small sizes and visually consistent (single style)."
-      ]
-    },
-    {
-      "id": "REQ-13",
-      "text": "Document platform delivery expectations: provide an installable offline-capable web app (PWA-like) within the Internet Computer project; do not claim to generate an Android APK build artifact.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "compatible smartphone Android (APK final à générer).",
-          "Inclure le fichier APK compilé prêt à installer."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Project output is a web application that runs on mobile browsers and supports offline usage for core flows.",
-        "No requirement or code path depends on building or distributing an Android APK."
+        "If the browser supports the PWA install prompt, an “Install” button is shown somewhere appropriate (e.g., header menu/help) and triggers the install prompt.",
+        "If the install prompt is not available, the same UI element opens the “Install on Android” help surface instead of failing silently.",
+        "The install CTA and any related messaging added by this requirement are in English.",
+        "This change does not break offline behavior or existing navigation flow."
       ]
     }
   ],
   "constraints": [
-    "Respect the Internet Computer project constraints: single Motoko actor backend (if used) and React+TypeScript+Tailwind+React Query frontend.",
-    "Do not modify any files under frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "Core app features must not require Internet connectivity (no mandatory backend calls for saving/viewing/exporting).",
-    "User requested Android SQLite/Room and an APK, but this project must be implemented as a web app on the provided React+Motoko template; use browser local storage/IndexedDB for offline persistence instead of Android-specific databases."
+    "Do not claim to generate or deliver an Android APK artifact; this project is delivered as an installable offline-capable web app (PWA-like).",
+    "Do not modify files under frontend/src/components/ui (read-only).",
+    "Keep the backend as a single Motoko actor; no new backend services."
   ],
   "nonGoals": [
-    "Android-native implementation (Kotlin/Java), SQLite/Room setup, or generating an APK artifact.",
-    "Third-party authentication providers (only Internet Identity exists, and it is not required for offline mode).",
-    "Real-time synchronization, push notifications, or any cloud/external database integrations.",
-    "Excel export (only PDF export is required)."
+    "Generating, signing, or distributing an Android APK/AAB.",
+    "Publishing to the Google Play Store.",
+    "Adding native Android storage (SQLite/Room) or native Android APIs."
   ],
   "imageRequirements": {
-    "required": [
-      "App logo mark with shield/eye surveillance motif, flat modern style, navy/gray on white (athena-logo.dim_512x512.png)",
-      "Splash screen background with subtle geometric pattern in navy/charcoal gradient (athena-splash-bg.dim_1080x1920.png)",
-      "Set of 6 access point icons in a consistent monochrome style (acp-icons-set.dim_512x512.png)",
-      "Vehicle type icon set in a consistent monochrome style (vehicle-icons-set.dim_512x512.png)"
-    ],
+    "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [
-      "Use English for user-facing text in build requests."
-    ],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }
